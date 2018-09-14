@@ -1,0 +1,35 @@
+[
+    {
+        "base": "statue",
+        "class": "art",
+        "materials":[
+            "stone",
+            "gem",
+            "precious metal",
+            "wood"
+        ],
+        "contents":[
+            "beast",
+            "monstrosity"
+        ]
+    },
+    {
+        "base": "wineskin",
+        "class": "container",
+        "materials":[
+            "leather"
+        ],
+        "contents":[
+            "beverage"
+        ]
+    },
+    {
+        "base": "ring",
+        "class": "jewelry",
+        "materials":[
+            "gem",
+            "precious metal",
+            "wood"
+        ]
+    }
+]

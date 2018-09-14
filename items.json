@@ -1,0 +1,51 @@
+[
+    
+    {
+        "base": "statue",
+        "class": "art",
+        "materials":[
+            "stone",
+            "gem",
+            "precious metal",
+            "wood"
+        ],
+        "contents":[
+            "beast",
+            "monstrosity"
+        ]
+    },
+    {
+        "base": "doll",
+        "class": "art",
+        "materials":[
+            "wood",
+            "cloth"
+        ],
+        "contents":[
+            "beast",
+            "humanoid"
+        ]
+    },
+    {
+        "base": "wineskin",
+        "class": "container",
+        "materials":[
+            "leather"
+        ],
+        "contents":[
+            "beverage"
+        ]
+    },
+    {
+        "base": "flask",
+        "class": "container",
+        "materials":[
+            "leather",
+            "base metal",
+            "precious metal"
+        ],
+        "contents":[
+            "beverage"
+        ]
+    }
+]

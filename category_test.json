@@ -1,0 +1,51 @@
+[
+    {
+        "name": "wood",
+        "types":[
+            "ash wood",
+            "bamboo wood",
+            "birch wood",
+            "cedar wood",
+            "cherry wood",
+            "corkwood",
+            "elm wood",
+            "eucalyptus wood",
+            "fir wood",
+            "ironwood",
+            "mahogany wood",
+            "maple wood",
+            "oak wood",
+            "pine wood",
+            "rosewood",
+            "sandalwood",
+            "spruce wood",
+            "walnut wood"
+        ]
+    },
+    {
+        "name": "base metal",
+        "types":[
+            "black iron",
+            "steel",
+            "copper",
+            "bronze",
+            "brass",
+            "pig iron",
+            "cast iron",
+            "lead",
+            "tin"
+        ]
+    },
+    {
+        "name": "precious metal",
+        "types":[
+            "gold",
+            "platinum",
+            "silver",
+            "copper",
+            "rose gold",
+            "electrum",
+            "white gold"
+        ]
+    }
+]
