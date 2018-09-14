@@ -14,7 +14,7 @@
             "resembling "
         ]
     },
-    {
+    { 
         "name": "container",
         "format": "<article> <material> <base> <verb> <content>",
         "example": "<a> <calf leather> <wineskin> <half full of> <mulled ale>",

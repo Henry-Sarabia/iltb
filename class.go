@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+
+	"github.com/pkg/errors"
 )
 
 type class struct {
@@ -14,12 +16,14 @@ type class struct {
 }
 
 func (c class) randomVerb() (string, error) {
-	return randomString(c.Verb)
+	v, err := randomString(c.Verb)
+	if err != nil {
+		return "", errors.Wrap(err, "verb slice is empty")
+	}
+	return v, err
 }
 
-type classes map[string]class
-
-func loadClasses(filename string) (classes, error) {
+func loadClasses(filename string) (map[string]class, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -34,13 +38,13 @@ func loadClasses(filename string) (classes, error) {
 	return c, nil
 }
 
-func readClasses(r io.Reader) (classes, error) {
-	c := []class{}
+func readClasses(r io.Reader) (map[string]class, error) {
+	var c []class
 	if err := json.NewDecoder(r).Decode(&c); err != nil {
 		return nil, err
 	}
 
-	cs := classes{}
+	cs := make(map[string]class)
 	for _, v := range c {
 		cs[v.Name] = v
 	}

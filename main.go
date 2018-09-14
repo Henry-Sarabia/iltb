@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"math/rand"
@@ -22,7 +21,7 @@ func main() {
 }
 
 func testLoadFactory() error {
-	f, err := Load("items.json", "materials.json", "contents.json", "classes.json")
+	f, err := Load("recipes.json", "materials.json", "contents.json", "classes.json")
 	if err != nil {
 		return err
 	}
@@ -40,7 +39,7 @@ func testLoadFactory() error {
 }
 
 func testSimpleFactory() error {
-	i, err := os.Open("items.json")
+	i, err := os.Open("recipes.json")
 	if err != nil {
 		return err
 	}
@@ -74,13 +73,4 @@ func testSimpleFactory() error {
 	}
 
 	return nil
-}
-
-func randomString(s []string) (string, error) {
-	if len(s) < 1 {
-		return "", errors.New("string slice cannot be empty")
-	}
-
-	r := rand.Intn(len(s))
-	return s[r], nil
 }

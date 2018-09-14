@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+
+	"github.com/pkg/errors"
 )
 
 type category struct {
@@ -12,12 +14,14 @@ type category struct {
 }
 
 func (c category) random() (string, error) {
-	return randomString(c.Types)
+	t, err := randomString(c.Types)
+	if err != nil {
+		return "", errors.Wrap(err, "types slice is empty")
+	}
+	return t, nil
 }
 
-type categories map[string]category
-
-func loadCategories(filename string) (categories, error) {
+func loadCategories(filename string) (map[string]category, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -27,14 +31,14 @@ func loadCategories(filename string) (categories, error) {
 	return readCategories(f)
 }
 
-func readCategories(r io.Reader) (categories, error) {
-	c := []category{}
+func readCategories(r io.Reader) (map[string]category, error) {
+	var c []category
 
 	if err := json.NewDecoder(r).Decode(&c); err != nil {
 		return nil, err
 	}
 
-	cs := categories{}
+	cs := make(map[string]category)
 	for _, v := range c {
 		cs[v.Name] = v
 	}

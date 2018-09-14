@@ -23,8 +23,8 @@ func TestReadClasses(t *testing.T) {
 		t.Errorf("got: <%v>, want: <%v>", len(c), 3)
 	}
 
-	if c["clothing"].Format != "<determiner> <material> <base> <verb> <content>" {
-		t.Errorf("got: <%v>, want: <%v>", c["clothing"].Format, "<determiner> <material> <base> <verb> <content>")
+	if c["clothing"].Format != "<article> <material> <base> <verb> <content>" {
+		t.Errorf("got: <%v>, want: <%v>", c["clothing"].Format, "<article> <material> <base> <verb> <content>")
 	}
 }
 
@@ -38,7 +38,7 @@ func TestLoadClasses(t *testing.T) {
 		t.Errorf("got: <%v>, want: <%v>", len(c), 3)
 	}
 
-	if c["clothing"].Format != "<determiner> <material> <base> <verb> <content>" {
-		t.Errorf("got: <%v>, want: <%v>", c["clothing"].Format, "<determiner> <material> <base> <verb> <content>")
+	if c["clothing"].Format != "<article> <material> <base> <verb> <content>" {
+		t.Errorf("got: <%v>, want: <%v>", c["clothing"].Format, "<article> <material> <base> <verb> <content>")
 	}
 }
