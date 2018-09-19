@@ -8,34 +8,18 @@ import (
 	"time"
 )
 
-func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
-}
+// func init() {
+// 	rand.Seed(time.Now().UTC().UnixNano())
+// }
 
 func main() {
-	err := testLoadFactory()
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	err := testSimpleFactory()
 	if err != nil {
 		log.Fatal(err)
 	}
 	return
-}
-
-func testLoadFactory() error {
-	f, err := Load("recipes.json", "materials.json", "contents.json", "classes.json")
-	if err != nil {
-		return err
-	}
-
-	for j := 0; j < 10; j++ {
-		i, err := f.Item()
-		if err != nil {
-			return err
-		}
-		fmt.Println(i)
-	}
-
-	return nil
-
 }
 
 func testSimpleFactory() error {
@@ -69,7 +53,11 @@ func testSimpleFactory() error {
 	}
 
 	for j := 0; j < 10; j++ {
-		fmt.Println(f.Item())
+		i, err := f.Item()
+		if err != nil {
+			return err
+		}
+		fmt.Println(i)
 	}
 
 	return nil

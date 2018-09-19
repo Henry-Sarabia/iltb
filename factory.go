@@ -1,21 +1,127 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"math/rand"
-	"strings"
 
-	"github.com/Henry-Sarabia/article"
 	"github.com/pkg/errors"
 )
 
 // Factory generates items
 type Factory struct {
-	recipeList  []recipe
-	materialMap map[string]category
-	contentMap  map[string]category
-	classMap    map[string]class
+	recipeList         []recipe
+	availableMaterials map[string]category
+	availableContents  map[string]category
+	availableClasses   map[string]class
+}
+
+// New returns a new *Factory initialized with the given recipes, material
+// categories, content categories, and classes.
+func New(r, m, c, cl io.Reader) (*Factory, error) {
+	var err error
+	f := &Factory{}
+	f.recipeList, err = readRecipes(r)
+	if err != nil {
+		return nil, err
+	}
+
+	f.availableMaterials, err = readCategories(m)
+	if err != nil {
+		return nil, err
+	}
+
+	f.availableContents, err = readCategories(c)
+	if err != nil {
+		return nil, err
+	}
+
+	f.availableClasses, err = readClasses(cl)
+	if err != nil {
+		return nil, err
+	}
+
+	return f, nil
+}
+
+// FromFiles returns a new Factory with the given filenames loaded into their
+// appropriate fields.
+func FromFiles(recipesFile, materialsFile, contentsFile, classesFile string) (*Factory, error) {
+	r, err := loadRecipes(recipesFile)
+	if err != nil {
+		return nil, err
+	}
+
+	m, err := loadCategories(materialsFile)
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := loadCategories(contentsFile)
+	if err != nil {
+		return nil, err
+	}
+
+	cl, err := loadClasses(classesFile)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Factory{
+		recipeList:         r,
+		availableMaterials: m,
+		availableContents:  c,
+		availableClasses:   cl,
+	}, nil
+}
+
+// Item generates a new item
+func (f *Factory) Item() (string, error) {
+	r, err := f.randomRecipe()
+	if err != nil {
+		return "", err
+	}
+
+	s, err := f.prepare(r)
+	if err != nil {
+		return "", err
+	}
+
+	it, err := compose(s)
+	if err != nil {
+		return "", err
+	}
+
+	return it, nil
+}
+
+func (f *Factory) prepare(r recipe) (*stage, error) {
+	s := stage{}
+	s.base = r.Base
+
+	m, err := r.material()
+	if err != nil {
+		return nil, errors.Wrapf(err, "cannot retrieve material from recipe '%v'", r.Base)
+	}
+	s.material, err = f.getMaterial(m)
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := r.content()
+	if err != nil {
+		return nil, errors.Wrapf(err, "cannot retrieve content from recipe '%v'", r.Base)
+	}
+	s.content, err = f.getContent(c)
+	if err != nil {
+		return nil, err
+	}
+
+	s.class, err = f.getClass(r.Class)
+	if err != nil {
+		return nil, err
+	}
+
+	return &s, nil
 }
 
 func (f *Factory) randomRecipe() (recipe, error) {
@@ -27,143 +133,29 @@ func (f *Factory) randomRecipe() (recipe, error) {
 	return f.recipeList[i], nil
 }
 
-// Item generates a new item
-func (f *Factory) Item() (string, error) {
-	r, err := f.randomRecipe()
-	if err != nil {
-		return "", err
-	}
-
-	m, err := r.material()
-	if err != nil {
-		return "", errors.Wrapf(err, "cannot retrieve material from recipe '%v'", r.Base)
-	}
-	mat, ok := f.materialMap[m]
+func (f *Factory) getMaterial(name string) (*category, error) {
+	m, ok := f.availableMaterials[name]
 	if !ok {
-		return "", errors.Errorf("cannot find material '%v' in material map", m)
+		return nil, errors.Errorf("cannot find material '%v' in available materials", name)
 	}
 
-	c, err := r.content()
-	if err != nil {
-		return "", errors.Wrapf(err, "cannot retrieve content from recipe '%v'", r.Base)
-	}
-	cont, ok := f.contentMap[c]
+	return &m, nil
+}
+
+func (f *Factory) getContent(name string) (*category, error) {
+	c, ok := f.availableContents[name]
 	if !ok {
-		return "", errors.Errorf("cannot find content '%v' in content map", c)
+		return nil, errors.Errorf("cannot find content '%v' in available contents", name)
 	}
 
-	cl, ok := f.classMap[r.Class]
+	return &c, nil
+}
+
+func (f *Factory) getClass(name string) (*class, error) {
+	c, ok := f.availableClasses[name]
 	if !ok {
-		return "", errors.Errorf("cannot find class '%v'", r.Class)
+		return nil, errors.Errorf("cannot find class '%v' in available classes", name)
 	}
 
-	return compose(r.Base, mat, cont, cl)
-}
-
-func compose(base string, mat category, cont category, cl class) (string, error) {
-	tok, err := tokenize(cl.Format)
-	if err != nil {
-		return "", err
-	}
-	for i := len(tok) - 1; i >= 0; i-- {
-		switch tok[i] {
-		case "<article>":
-			tok[i] = article.Indefinite(tok[i+1])
-
-		case "<material>":
-			m, err := mat.random()
-			if err != nil {
-				return "", errors.Wrap(err, "cannot retrieve random material type")
-			}
-			tok[i] = m
-
-		case "<base>":
-			tok[i] = base
-
-		case "<verb>":
-			v, err := cl.randomVerb()
-			if err != nil {
-				return "", errors.Wrap(err, "cannot retrieve random verb")
-			}
-			tok[i] = v
-
-		case "<content>":
-			c, err := cont.random()
-			if err != nil {
-				return "", errors.Wrap(err, "cannot retrieve random content type")
-			}
-			tok[i] = c
-
-		default:
-			return "", fmt.Errorf("unexpected token '%v' in format", tok[i])
-		}
-	}
-	return strings.Join(tok, " "), nil
-}
-
-func tokenize(format string) ([]string, error) {
-	tok := strings.Fields(format)
-	if tok[len(tok)-1] == "<article>" {
-		return nil, errors.New("article token cannot be the last token in a format")
-	}
-	return tok, nil
-}
-
-// New returns a new *Factory initialized with the given items, material
-// categories, and content categories.
-func New(r, m, c, cl io.Reader) (*Factory, error) {
-	var err error
-	f := &Factory{}
-	f.recipeList, err = readRecipes(r)
-	if err != nil {
-		return nil, err
-	}
-
-	f.materialMap, err = readCategories(m)
-	if err != nil {
-		return nil, err
-	}
-
-	f.contentMap, err = readCategories(c)
-	if err != nil {
-		return nil, err
-	}
-
-	f.classMap, err = readClasses(cl)
-	if err != nil {
-		return nil, err
-	}
-
-	return f, nil
-}
-
-// Load returns a new Factory with the given filenames loaded into their
-// appropriate fields.
-func Load(items, materialMap, contentMap, classMap string) (*Factory, error) {
-	i, err := loadRecipes(items)
-	if err != nil {
-		return nil, err
-	}
-
-	m, err := loadCategories(materialMap)
-	if err != nil {
-		return nil, err
-	}
-
-	c, err := loadCategories(contentMap)
-	if err != nil {
-		return nil, err
-	}
-
-	cl, err := loadClasses(classMap)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Factory{
-		recipeList:  i,
-		materialMap: m,
-		contentMap:  c,
-		classMap:    cl,
-	}, nil
+	return &c, nil
 }

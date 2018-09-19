@@ -123,15 +123,24 @@
         "name": "leather",
         "types":[
             "calf leather",
-            "deerskin leather",
+            "deer leather",
             "crocodile leather",
             "alligator leather",
-            "pig leather",
             "buffalo leather",
             "stingray leather",
-            "shark skin leather",
+            "shark leather"
+        ]
+    },
+    {
+        "name": "skin",
+        "types":[
+            "calfskin",
+            "deerskin",
+            "pig skin",
             "lamb skin",
-            "elk skin"
+            "snake skin",
+            "elk skin",
+            "buckskin"
         ]
     }
 ]

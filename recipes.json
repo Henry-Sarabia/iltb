@@ -30,7 +30,19 @@
         "base": "wineskin",
         "class": "container",
         "materials":[
-            "leather"
+            "leather",
+            "skin"
+        ],
+        "contents":[
+            "beverage"
+        ]
+    },
+    {
+        "base": "waterskin",
+        "class": "container",
+        "materials":[
+            "leather",
+            "skin"
         ],
         "contents":[
             "beverage"

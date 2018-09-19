@@ -3,8 +3,6 @@
         "base": "statue",
         "class": "art",
         "materials":[
-            "stone",
-            "gem",
             "precious metal",
             "wood"
         ],
@@ -27,9 +25,11 @@
         "base": "ring",
         "class": "jewelry",
         "materials":[
-            "gem",
             "precious metal",
             "wood"
+        ],
+        "contents":[
+            "beast"
         ]
     }
 ]

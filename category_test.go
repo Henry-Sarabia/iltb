@@ -1,14 +1,45 @@
 package main
 
 import (
+	"math/rand"
 	"os"
 	"testing"
 )
 
-const testCategoryFile = "category_test.json"
+const testMaterialFile = "testdata/category_material_test.json"
+const testContentFile = "testdata/category_content_test.json"
+
+func TestCategoryRandom(t *testing.T) {
+	rand.Seed(1)
+
+	c, err := loadCategories(testMaterialFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	wood, err := c["wood"].random()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if wood != "corkwood" {
+		t.Errorf("got: <%v>, want: <%v>", wood, "corkwood")
+	}
+
+	rand.Seed(2)
+
+	metal, err := c["precious metal"].random()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if metal != "rose gold" {
+		t.Errorf("got: <%v>, want: <%v>", metal, "rose gold")
+	}
+}
 
 func TestReadCategories(t *testing.T) {
-	f, err := os.Open(testCategoryFile)
+	f, err := os.Open(testMaterialFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +60,7 @@ func TestReadCategories(t *testing.T) {
 }
 
 func TestLoadCategories(t *testing.T) {
-	c, err := loadCategories(testCategoryFile)
+	c, err := loadCategories(testMaterialFile)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -12,11 +12,11 @@ type class struct {
 	Name    string   `json:"name"`
 	Format  string   `json:"format"`
 	Example string   `json:"example"`
-	Verb    []string `json:"verb"`
+	Verbs   []string `json:"verb"`
 }
 
 func (c class) randomVerb() (string, error) {
-	v, err := randomString(c.Verb)
+	v, err := randomString(c.Verbs)
 	if err != nil {
 		return "", errors.Wrap(err, "verb slice is empty")
 	}

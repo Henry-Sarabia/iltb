@@ -45,5 +45,15 @@
             "half colored",
             "faintly colored"
         ]
+    },
+    {
+        "name": "jewelry",
+        "format": "<article> <material> <base> <verb> <article> <content>",
+        "example": "<an> <elm wood> <ring> <in the motif of> <a> <spider>",
+        "verb":[
+            "made in the motif of",
+            "crafted in the style of",
+            "styled to look like"
+        ]
     }
 ]
