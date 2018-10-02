@@ -18,8 +18,8 @@ type Factory struct {
 // Item represents a mundane RPG item complete with description and suggested
 // gold value.
 type Item struct {
-	Description string
-	Value       float64
+	Description string  `json:"description"`
+	Value       float64 `json:"value"`
 }
 
 // New returns a new *Factory initialized with the given recipes, material
