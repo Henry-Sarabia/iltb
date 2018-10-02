@@ -1,6 +1,7 @@
 [
     {
         "name": "wood",
+        "multiplier": 1,
         "types":[
             "ash wood",
             "bamboo wood",
@@ -24,6 +25,7 @@
     },
     {
         "name": "base metal",
+        "multiplier": 5,
         "types":[
             "black iron",
             "steel",
@@ -38,6 +40,7 @@
     },
     {
         "name": "precious metal",
+        "multiplier": 10,
         "types":[
             "gold",
             "platinum",
@@ -46,6 +49,19 @@
             "rose gold",
             "electrum",
             "white gold"
+        ]
+    },
+    {
+        "name": "leather",
+        "multiplier": 3,
+        "types":[
+            "calf leather",
+            "deer leather",
+            "crocodile leather",
+            "alligator leather",
+            "buffalo leather",
+            "stingray leather",
+            "shark leather"
         ]
     }
 ]

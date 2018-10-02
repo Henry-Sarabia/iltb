@@ -44,8 +44,8 @@ func TestFactoryNew(t *testing.T) {
 		t.Errorf("got: <%v>, want <%v>", f.recipeList[0].Base, "statue")
 	}
 
-	if len(f.availableMaterials) != 3 {
-		t.Errorf("got: <%v>, want: <%v>", len(f.availableMaterials), 3)
+	if len(f.availableMaterials) != 4 {
+		t.Errorf("got: <%v>, want: <%v>", len(f.availableMaterials), 4)
 	}
 
 	if f.availableMaterials["wood"].Name != "wood" {
@@ -83,8 +83,8 @@ func TestFactoryFromFiles(t *testing.T) {
 		t.Errorf("got: <%v>, want <%v>", f.recipeList[0].Base, "statue")
 	}
 
-	if len(f.availableMaterials) != 3 {
-		t.Errorf("got: <%v>, want: <%v>", len(f.availableMaterials), 3)
+	if len(f.availableMaterials) != 4 {
+		t.Errorf("got: <%v>, want: <%v>", len(f.availableMaterials), 4)
 	}
 
 	if f.availableMaterials["wood"].Name != "wood" {
@@ -158,8 +158,12 @@ func TestItem(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if it != "an elm wood ring crafted in the style of a cat" {
-		t.Errorf("got: <%v>, want: <%v>", it, "an elm wood ring crafted in the style of a cat")
+	if it.Description != "an elm wood ring crafted in the style of a cat" {
+		t.Errorf("got: <%v>, want: <%v>", it.Description, "an elm wood ring crafted in the style of a cat")
+	}
+
+	if it.Value != 3 {
+		t.Errorf("got: <%v>, want: <%v>", it.Value, 3)
 	}
 }
 

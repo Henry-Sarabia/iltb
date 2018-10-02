@@ -10,9 +10,14 @@ import (
 
 type stage struct {
 	base     string
+	value    float64
 	class    *class
 	material *category
 	content  *category
+}
+
+func appraise(s *stage) (float64, error) {
+	return s.value * s.material.Multiplier, nil
 }
 
 func compose(s *stage) (string, error) {

@@ -13,6 +13,7 @@ import (
 type recipe struct {
 	Base            string   `json:"base"`
 	Class           string   `json:"class"`
+	Value           float64  `json:"value"`
 	MaterialChoices []string `json:"materials"`
 	ContentChoices  []string `json:"contents"`
 }

@@ -30,6 +30,31 @@ func TestCompose(t *testing.T) {
 	}
 }
 
+func TestAppraise(t *testing.T) {
+	rand.Seed(1)
+
+	f, err := FromFiles(testRecipeFile, testMaterialFile, testContentFile, testClassFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	r := f.recipeList[0]
+
+	s, err := f.prepare(r)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	val, err := appraise(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if val != 10 {
+		t.Errorf("got: <%v>, want: <%v>", val, 10)
+	}
+}
+
 func TestTokenize(t *testing.T) {
 	cl, err := loadClasses(testClassFile)
 	if err != nil {

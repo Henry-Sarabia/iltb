@@ -7,12 +7,19 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Factory generates items
+// Factory generates Items
 type Factory struct {
 	recipeList         []recipe
 	availableMaterials map[string]category
 	availableContents  map[string]category
 	availableClasses   map[string]class
+}
+
+// Item represents a mundane RPG item complete with description and suggested
+// gold value.
+type Item struct {
+	Description string
+	Value       float64
 }
 
 // New returns a new *Factory initialized with the given recipes, material
@@ -75,28 +82,34 @@ func FromFiles(recipesFile, materialsFile, contentsFile, classesFile string) (*F
 }
 
 // Item generates a new item
-func (f *Factory) Item() (string, error) {
+func (f *Factory) Item() (*Item, error) {
 	r, err := f.randomRecipe()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	s, err := f.prepare(r)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	it, err := compose(s)
+	desc, err := compose(s)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return it, nil
+	val, err := appraise(s)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Item{Description: desc, Value: val}, nil
 }
 
 func (f *Factory) prepare(r recipe) (*stage, error) {
 	s := stage{}
 	s.base = r.Base
+	s.value = r.Value
 
 	m, err := r.material()
 	if err != nil {

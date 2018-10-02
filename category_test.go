@@ -50,8 +50,8 @@ func TestReadCategories(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(c) != 3 {
-		t.Errorf("got: <%v>, want: <%v>", len(c), 3)
+	if len(c) != 4 {
+		t.Errorf("got: <%v>, want: <%v>", len(c), 4)
 	}
 
 	if c["precious metal"].Name != "precious metal" {
@@ -65,8 +65,8 @@ func TestLoadCategories(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(c) != 3 {
-		t.Errorf("got: <%v>, want: <%v>", len(c), 3)
+	if len(c) != 4 {
+		t.Errorf("got: <%v>, want: <%v>", len(c), 4)
 	}
 
 	if c["wood"].Name != "wood" {

@@ -9,8 +9,9 @@ import (
 )
 
 type category struct {
-	Name  string   `json:"name"`
-	Types []string `json:"types"`
+	Name       string   `json:"name"`
+	Multiplier float64  `json:"multiplier"`
+	Types      []string `json:"types"`
 }
 
 func (c category) random() (string, error) {
